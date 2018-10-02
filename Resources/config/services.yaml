@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        public: false
+
+    LoremIpsum\ActionLoggerBundle\ActionLoggerInterface: '@LoremIpsum\ActionLoggerBundle\ActionLogger'
+
+    LoremIpsum\ActionLoggerBundle\ActionLogger:
+        class: LoremIpsum\ActionLoggerBundle\ActionLogger
+
+    LoremIpsum\ActionLoggerBundle\Twig\LogActionExtension:
+        class: LoremIpsum\ActionLoggerBundle\Twig\LogActionExtension
+        tags: ['twig.extension']
+
+    LoremIpsum\ActionLoggerBundle\ActionFactory:
+        class: LoremIpsum\ActionLoggerBundle\ActionFactory
+        arguments: ['@doctrine.orm.entity_manager', '%loremipsum.action_logger.mapping%']
