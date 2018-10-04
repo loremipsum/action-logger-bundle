@@ -3,9 +3,9 @@
 ## Configuration
 
 ```yaml
-# config/packages/li_action_logger.yaml 
+# config/packages/loremipsum_action_logger.yaml 
 
-li_action_logger:
+lorem_ipsum_action_logger:
     mapping:
         foo.bar: { class: App\Action\Foo\Bar }
         foo.baz: { class: App\Action\Foo\Baz, alias: 'Foo.Baz' }
