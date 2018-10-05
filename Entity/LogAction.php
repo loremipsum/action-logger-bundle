@@ -9,7 +9,7 @@ use LoremIpsum\ActionLoggerBundle\Action;
 use LoremIpsum\ActionLoggerBundle\ActionFactory;
 
 /**
- * @ORM\Table(name="log")
+ * @ORM\Table(name="log", indexes={@ORM\Index(name="action_idx", columns={"action"})})
  * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository")
  */
 class LogAction
@@ -41,7 +41,7 @@ class LogAction
 
     /**
      * @var string
-     * @ORM\Column(name="action", type="string", length=192)
+     * @ORM\Column(name="action", type="string", length=191)
      */
     private $action;
 

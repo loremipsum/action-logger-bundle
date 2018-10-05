@@ -1,5 +1,12 @@
 # ActionLoggerBundle Changelog
 
+## [0.1.2] - 2018-10-05
+### Add
+- Add db index for log.action column
+
+### Fix
+- Set log.action column max length to 191
+
 ## [0.1.1] - 2018-10-05
 ### Fix
 - Fix mapping configuration definition to support alias array
