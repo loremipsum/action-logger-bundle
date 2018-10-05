@@ -19,10 +19,15 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('action')
                     ->arrayPrototype()
                         ->children()
-                            ->scalarNode('class')
-                                ->isRequired()
+                            ->scalarNode('class')->isRequired()->end()
+                            ->arrayNode('alias')
+                                ->beforeNormalization()->castToArray()->end()
+                                ->scalarPrototype()->end()
                             ->end()
-                            ->arrayNode('alias')->beforeNormalization()->castToArray()->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;
