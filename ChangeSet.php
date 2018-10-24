@@ -11,13 +11,13 @@ trait ChangeSet
             unset($changeSet[$key]);
         }
         if (empty($changeSet)) {
-            return ['keine Änderungen', []];
+            return ['no loggable changes', []];
         }
 
         $msg    = [];
         $params = [];
         foreach ($changeSet as $key => $values) {
-            $msg[] = "<strong>%cskey__{$key}%</strong> von '%csval__{$key}__0%' zu '%csval__{$key}__1%'";
+            $msg[] = "<strong>%cskey__{$key}%</strong> from '%csval__{$key}__0%' to '%csval__{$key}__1%'";
 
             $params['%cskey__' . $key . '%']    = $key;
             $params['%csval__' . $key . '__0%'] = $this->getChangeSetValue($values[0]);

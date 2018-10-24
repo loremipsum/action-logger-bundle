@@ -1,5 +1,13 @@
 # ActionLoggerBundle Changelog
 
+## [0.1.3] - 2018-10-24
+### Add
+- Add loremipsum/route-generator-bundle as required dependancy
+
+### Change
+- Use htmlspecialchars instead of strip_tags for flash messages
+- Update texts
+
 ## [0.1.2] - 2018-10-05
 ### Add
 - Add db index for log.action column

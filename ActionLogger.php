@@ -205,7 +205,9 @@ class ActionLogger implements ActionLoggerInterface
 
         if ($this->session instanceof Session) {
             $this->session->getFlashBag()
-                          ->add($flashType, strip_tags($this->prepareMessage($action->getMessage(), 'strip_tags')));
+                          ->add($flashType, $this->prepareMessage($action->getMessage(), function($message) {
+                              return htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE);
+                          }));
         }
 
         return $this;
