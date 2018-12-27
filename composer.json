@@ -1,10 +1,10 @@
 {
     "name": "loremipsum/action-logger-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony ActionLoggerBundle",
+    "description": "Symfony bundle to log custom actions and events with doctrine.",
     "keywords": ["logging"],
     "homepage": "https://www.loremipsum.at",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": ">=7.0",
         "symfony/http-foundation": "^3.4 || ^4.0",

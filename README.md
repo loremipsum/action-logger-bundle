@@ -1,4 +1,6 @@
-# ActionLogger
+# ActionLogger bundle
+
+Symfony bundle to log custom actions and events with doctrine.
 
 ## Configuration
 
@@ -12,7 +14,85 @@ lorem_ipsum_action_logger:
         bar.foo: { class: App\Action\Bar\Foo, alias: ['Bar.Foo', 'BarFoo'] }
 ```
 
+## Action example
+
+Usage example:  
+A new user has been created. All you have to do is call `log` or `flashLog` 
+on our ActionLogger with the `UserAddAction` and the new `$user` entity.
+
+```php
+/** @var LoremIpsum\ActionLoggerBundle\ActionLogger $actionLogger **/
+$actionLogger->log(new UserAddAction($user));
+// Display action message as flash message
+$actionLogger->flashLog(new UserAddAction($user), 'success');
+```
+
+And here is our `UserAddAction`:
+
+```php
+<?php
+
+namespace App\Action\User;
+
+use App\Entity\User;
+use Doctrine\Common\Persistence\ObjectManager;
+use LoremIpsum\ActionLoggerBundle\EntityAction;
+use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
+use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
+
+class UserAddAction extends EntityAction
+{
+    /**
+     * @var User
+     */
+    protected $entity;
+
+    public function __construct(User $entity = null)
+    {
+        parent::__construct($entity);
+    }
+        
+    public function getIcon()
+    {
+        return 'fa fa-plus';
+    }
+
+    public function getLevel(): int
+    {
+        return LogAction::LEVEL_INFO;
+    }
+
+    protected function load(ObjectManager $em)
+    {
+        $this->entity = $em->getRepository(User::class)->find($this->meta['id']);
+    }
+
+    private function getLink(RouteGeneratorInterface $router = null): array
+    {
+        if (! $router || ! $this->entity instanceof User) {
+            return ['%entity%', ['%entity%' => $this->meta['name']]];
+        }
+        return ["<a href=\"{$router->generate($this->entity)}\">%entity%</a>", ['%entity%' => $this->entity]];
+    }
+    
+    public function getMessage(RouteGeneratorInterface $router = null)
+    {
+        list($entity, $entities) = $this->getLink($router);
+        return ["User $entity added.", $entities];
+    }
+
+    public function getUserMessage(RouteGeneratorInterface $router = null)
+    {
+        list($user, $users) = $this->getUserLink($router);
+        list($entity, $entities) = $this->getLink($router);
+        return ["$user added user $entity.", $users, $entities];
+    }
+}
+```
+
 ## Event subscriber example
+
+Log all action events with Psr\Log\LoggerInterface.
 
 ```php
 <?php
