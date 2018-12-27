@@ -2,7 +2,7 @@
 
 ## [0.1.3] - 2018-10-24
 ### Add
-- Add loremipsum/route-generator-bundle as required dependancy
+- Add loremipsum/route-generator-bundle as required dependency
 
 ### Change
 - Use htmlspecialchars instead of strip_tags for flash messages
