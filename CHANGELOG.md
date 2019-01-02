@@ -1,5 +1,9 @@
 # ActionLoggerBundle Changelog
 
+## [0.1.4] - 2018-XX-XX
+### Change
+- Improve ChangeSet value output
+
 ## [0.1.3] - 2018-10-24
 ### Add
 - Add loremipsum/route-generator-bundle as required dependency
