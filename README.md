@@ -8,10 +8,15 @@ Symfony bundle to log custom actions and events with doctrine.
 # config/packages/loremipsum_action_logger.yaml 
 
 lorem_ipsum_action_logger:
+    # mapping is used to store actions in the database without using the class name
     mapping:
-        foo.bar: { class: App\Action\Foo\Bar }
-        foo.baz: { class: App\Action\Foo\Baz, alias: 'Foo.Baz' }
-        bar.foo: { class: App\Action\Bar\Foo, alias: ['Bar.Foo', 'BarFoo'] }
+        user.add: { class: App\Action\User\UserAddAction }
+        user.edit: { class: App\Action\User\UserEditAction, alias: 'user_edit' }
+        settings.edit: { class: App\Action\SettingsEditAction, alias: ['settings_edit', 'settings_update'] }
+    # entity_mapping is used to store action relations to entities in the database using the class name
+    entity_mapping:
+        user: App\Entity\User
+        settings: App\Entity\Settings
 ```
 
 ## Action example

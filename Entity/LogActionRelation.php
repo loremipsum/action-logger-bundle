@@ -5,12 +5,13 @@ namespace LoremIpsum\ActionLoggerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="log_relations")
+ * @ORM\Table(name="log_relations", indexes={@ORM\Index(name="logActionRelations_keyHash_idx", columns={"key_hash"})})
  * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRelationRepository")
  */
 class LogActionRelation
 {
     /**
+     * @var int|null
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -25,7 +26,7 @@ class LogActionRelation
     private $log;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(type="integer")
      */
     private $keyId;
@@ -35,6 +36,20 @@ class LogActionRelation
      * @ORM\Column(type="string")
      */
     private $keyEntity;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=64)
+     */
+    private $keyHash;
+
+    public function __construct(LogAction $log, $keyId, $keyEntity)
+    {
+        $this->log       = $log;
+        $this->keyId     = $keyId;
+        $this->keyEntity = $keyEntity;
+        $this->keyHash   = self::hash($keyId, $keyEntity);
+    }
 
     /**
      * @return integer
@@ -53,27 +68,11 @@ class LogActionRelation
     }
 
     /**
-     * @param LogAction $log
-     */
-    public function setLog(LogAction $log)
-    {
-        $this->log = $log;
-    }
-
-    /**
      * @return int
      */
     public function getKeyId()
     {
         return $this->keyId;
-    }
-
-    /**
-     * @param int $keyId
-     */
-    public function setKeyId($keyId)
-    {
-        $this->keyId = $keyId;
     }
 
     /**
@@ -85,10 +84,20 @@ class LogActionRelation
     }
 
     /**
-     * @param string $keyEntity
+     * @return string
      */
-    public function setKeyEntity($keyEntity)
+    public function setKeyHash()
     {
-        $this->keyEntity = $keyEntity;
+        return $this->keyHash;
+    }
+
+    /**
+     * @param int|string $id
+     * @param string     $entity
+     * @return string
+     */
+    public static function hash($id, $entity)
+    {
+        return hash("sha256", $entity . ':' . $id);
     }
 }

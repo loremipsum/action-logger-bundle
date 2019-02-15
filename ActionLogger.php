@@ -122,15 +122,7 @@ class ActionLogger implements ActionLoggerInterface
         $persist = ! $action->skipPersisting();
         if ($persist) {
             $this->em->persist($log);
-            foreach ($action->getRelations() as $keyEntity => $keyIds) {
-                foreach ((array)$keyIds as $keyId) {
-                    $relation = new LogActionRelation();
-                    $relation->setLog($log);
-                    $relation->setKeyId($keyId);
-                    $relation->setKeyEntity($keyEntity);
-                    $this->em->persist($relation);
-                }
-            }
+            $this->persistLogRelations($log, $action);
         }
 
         $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
@@ -172,16 +164,7 @@ class ActionLogger implements ActionLoggerInterface
             $log = new LogAction($this->actionFactory, $action, $extra);
             if (! $action->skipPersisting()) {
                 $this->em->persist($log);
-
-                foreach ($action->getRelations() as $keyEntity => $keyIds) {
-                    foreach ((array)$keyIds as $keyId) {
-                        $relation = new LogActionRelation();
-                        $relation->setLog($log);
-                        $relation->setKeyId($keyId);
-                        $relation->setKeyEntity($keyEntity);
-                        $this->em->persist($relation);
-                    }
-                }
+                $this->persistLogRelations($log, $action);
             }
 
             $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
@@ -190,6 +173,17 @@ class ActionLogger implements ActionLoggerInterface
         $this->em->flush();
 
         return $this;
+    }
+
+    private function persistLogRelations(LogAction $log, Action $action)
+    {
+        foreach ($action->getRelations() as $entityClass => $keyIds) {
+            $keyEntity = $this->actionFactory->getEntityKey($entityClass);
+            foreach ((array)$keyIds as $keyId) {
+                $relation = new LogActionRelation($log, $keyId, $keyEntity);
+                $this->em->persist($relation);
+            }
+        }
     }
 
     /**
@@ -205,7 +199,7 @@ class ActionLogger implements ActionLoggerInterface
 
         if ($this->session instanceof Session) {
             $this->session->getFlashBag()
-                          ->add($flashType, $this->prepareMessage($action->getMessage(), function($message) {
+                          ->add($flashType, $this->prepareMessage($action->getMessage(), function ($message) {
                               return htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE);
                           }));
         }
@@ -215,7 +209,7 @@ class ActionLogger implements ActionLoggerInterface
 
     /**
      * @param array|string $message Action::getMessage or Action::getUserMessage
-     * @param callable $filterCallback
+     * @param callable     $filterCallback
      *
      * @return string
      * @throws \Twig_Error_Runtime

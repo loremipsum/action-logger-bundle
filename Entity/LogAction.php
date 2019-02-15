@@ -9,7 +9,7 @@ use LoremIpsum\ActionLoggerBundle\Action;
 use LoremIpsum\ActionLoggerBundle\ActionFactory;
 
 /**
- * @ORM\Table(name="log", indexes={@ORM\Index(name="action_idx", columns={"action"})})
+ * @ORM\Table(name="log", indexes={@ORM\Index(name="logAction_action_idx", columns={"action"})})
  * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository")
  */
 class LogAction
@@ -21,14 +21,15 @@ class LogAction
     const LEVEL_DEBUG = 100;
 
     /**
-     * @var integer
-     * @ORM\Column(name="id", type="integer")
+     * @var int|null
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $user;
@@ -46,24 +47,25 @@ class LogAction
     private $action;
 
     /**
-     * @var array
+     * @var array|null
      * @ORM\Column(name="meta_data", type="array", nullable=true)
      */
     private $meta_data;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="level", type="smallint")
      */
     private $level;
 
     /**
-     * @var array
+     * @var array|null
      * @ORM\Column(name="extra", type="array", nullable=true)
      */
     private $extra;
 
     /**
+     * @var LogActionRelation[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="LogActionRelation", mappedBy="log")
      */
     private $relations;
@@ -82,7 +84,7 @@ class LogAction
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -130,7 +132,7 @@ class LogAction
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getMetaData()
     {
@@ -146,7 +148,7 @@ class LogAction
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getExtra()
     {
@@ -154,7 +156,7 @@ class LogAction
     }
 
     /**
-     * @param User $user
+     * @param User|null $user
      */
     private function setUser(User $user = null)
     {
@@ -162,7 +164,7 @@ class LogAction
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getUser()
     {
@@ -170,7 +172,7 @@ class LogAction
     }
 
     /**
-     * @param integer $level
+     * @param int $level
      */
     private function setLevel($level)
     {
@@ -178,7 +180,7 @@ class LogAction
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getLevel()
     {

@@ -18,5 +18,6 @@ class LoremIpsumActionLoggerExtension extends Extension
         $config        = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('loremipsum.action_logger.mapping', (! empty($config['mapping']) ? $config['mapping'] : []));
+        $container->setParameter('loremipsum.action_logger.entity_mapping', (! empty($config['entity_mapping']) ? $config['entity_mapping'] : []));
     }
 }

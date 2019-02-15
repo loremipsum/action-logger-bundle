@@ -3,17 +3,33 @@
 namespace LoremIpsum\ActionLoggerBundle\Repository;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use LoremIpsum\ActionLoggerBundle\ActionFactory;
+use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
+use LoremIpsum\ActionLoggerBundle\Entity\LogActionRelation;
 
-class LogActionRepository extends EntityRepository
+class LogActionRepository extends ServiceEntityRepository
 {
     /**
+     * @var ActionFactory
+     */
+    protected $actionFactory;
+
+    public function __construct(ManagerRegistry $registry, ActionFactory $actionFactory)
+    {
+        $this->actionFactory = $actionFactory;
+        parent::__construct($registry, LogAction::class);
+    }
+
+    /**
      * @param User  $user
-     * @param array $actions   List of action names
+     * @param array $actions List of action names
      * @param array $relations List of Entity class => [ids]
      * @param int   $offset
-     * @param int   $limit     0 for no limit
+     * @param int   $limit 0 for no limit
      *
      * @return Paginator
      */
@@ -35,17 +51,7 @@ class LogActionRepository extends EntityRepository
         }
 
         if (! empty($relations)) {
-            $relationList = [];
-            foreach ($relations as $entity => $ids) {
-                foreach ((array)$ids as $id) {
-                    $relationList[] = $id . ':' . $entity;
-                }
-            }
-            if (! empty($relationList)) {
-                $qb->leftJoin('log.relations', 'relations');
-                $qb->andWhere("CONCAT(relations.keyId, ':', relations.keyEntity) IN (:relationList)");
-                $qb->setParameter('relationList', $relationList);
-            }
+            $this->filterRelations($qb, $relations);
         }
 
         if ($limit) {
@@ -58,5 +64,21 @@ class LogActionRepository extends EntityRepository
         $qb->orderBy('log.id', 'DESC');
 
         return new Paginator($qb);
+    }
+
+    private function filterRelations(QueryBuilder $qb, $relations)
+    {
+        $relationList = [];
+        foreach ($relations as $entityClass => $ids) {
+            $keyEntity = $this->actionFactory->getEntityKey($entityClass);
+            foreach ((array)$ids as $id) {
+                $relationList[] = LogActionRelation::hash($id, $keyEntity);
+            }
+        }
+        if (! empty($relationList)) {
+            $qb->leftJoin('log.relations', 'relations')
+               ->andWhere("relations.keyHash IN (:relationList)")
+               ->setParameter('relationList', $relationList);
+        }
     }
 }

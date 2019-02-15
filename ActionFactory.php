@@ -11,14 +11,17 @@ class ActionFactory
     /**
      * @var ObjectManager
      */
-    protected $em;
+    protected $entityManager;
 
-    protected $mapping;
+    protected $actionMapping;
 
-    public function __construct(ObjectManager $em, array $mapping)
+    protected $entityMapping;
+
+    public function __construct(ObjectManager $entityManager, array $mapping, array $entityMapping)
     {
-        $this->em      = $em;
-        $this->mapping = $mapping;
+        $this->entityManager = $entityManager;
+        $this->actionMapping = $mapping;
+        $this->entityMapping = $entityMapping;
     }
 
     /**
@@ -27,7 +30,7 @@ class ActionFactory
     public function getActionMappings()
     {
         $mapping = [];
-        foreach ($this->mapping as $action => $definition) {
+        foreach ($this->actionMapping as $action => $definition) {
             if (isset($mapping[$action])) {
                 throw new \RuntimeException("Multiple definitions for action '{$action}' not allowed.");
             }
@@ -42,7 +45,7 @@ class ActionFactory
     public function getAliasMappings()
     {
         $aliases = [];
-        foreach ($this->mapping as $action => $definition) {
+        foreach ($this->actionMapping as $action => $definition) {
             if (empty($definition['alias'])) {
                 continue;
             }
@@ -81,7 +84,7 @@ class ActionFactory
     public function getActionFromLog(LogAction $log)
     {
         $action = $this->getActionInstance($log);
-        $action->loadFromLog($this->em, $log);
+        $action->loadFromLog($this->entityManager, $log);
         return $action;
     }
 
@@ -102,10 +105,31 @@ class ActionFactory
                 throw new \RuntimeException("$action found as alias for $mappingAction, but $mappingAction has no action mapping");
             }
             $log->setAction($mappingAction);
-            $this->em->flush();
+            $this->entityManager->flush();
             return new $mappings[$mappingAction]();
         }
 
         return new UnknownAction();
+    }
+
+    /**
+     * @return array List of key => Entity class
+     */
+    public function getEntityMappings()
+    {
+        return $this->entityMapping;
+    }
+
+    /**
+     * @param string $class
+     * @return string
+     */
+    public function getEntityKey($class)
+    {
+        $mapping = array_flip($this->entityMapping);
+        if (! isset($mapping[$class])) {
+            throw new \RuntimeException("Missing entity mapping for class $class");
+        }
+        return $mapping[$class];
     }
 }

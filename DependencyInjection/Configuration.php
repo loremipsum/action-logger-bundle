@@ -27,6 +27,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('entity_mapping')
+                    ->normalizeKeys(false)
+                    ->scalarPrototype()
+                ->end()
             ->end()
         ;
 

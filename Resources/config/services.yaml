@@ -14,4 +14,8 @@ services:
 
     LoremIpsum\ActionLoggerBundle\ActionFactory:
         class: LoremIpsum\ActionLoggerBundle\ActionFactory
-        arguments: ['@doctrine.orm.entity_manager', '%loremipsum.action_logger.mapping%']
+        arguments: ['@doctrine.orm.entity_manager', '%loremipsum.action_logger.mapping%', '%loremipsum.action_logger.entity_mapping%']
+
+    LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository:
+        class: LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository
+        tags: ['doctrine.repository_service']
