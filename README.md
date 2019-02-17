@@ -5,7 +5,7 @@ Symfony bundle to log custom actions and events with doctrine.
 ## Configuration
 
 ```yaml
-# config/packages/loremipsum_action_logger.yaml 
+# config/packages/lorem_ipsum_action_logger.yaml 
 
 lorem_ipsum_action_logger:
     # mapping is used to store actions in the database without using the class name
@@ -56,7 +56,7 @@ class UserAddAction extends EntityAction
     {
         parent::__construct($entity);
     }
-        
+    
     public function getIcon()
     {
         return 'fa fa-plus';
