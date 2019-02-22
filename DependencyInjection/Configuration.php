@@ -2,6 +2,8 @@
 
 namespace LoremIpsum\ActionLoggerBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -9,15 +11,9 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('lorem_ipsum_action_logger');
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('lorem_ipsum_action_logger');
-        }
-
-        $rootNode
+        $name        = 'lorem_ipsum_admin_lte';
+        $treeBuilder = new TreeBuilder($name);
+        $this->getRootNode($treeBuilder, $name)
             ->children()
                 ->arrayNode('mapping')
                     ->normalizeKeys(false)
@@ -40,5 +36,19 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * @param TreeBuilder $treeBuilder
+     * @param string      $name
+     * @return ArrayNodeDefinition|NodeDefinition
+     */
+    private function getRootNode(TreeBuilder $treeBuilder, string $name)
+    {
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            return $treeBuilder->getRootNode();
+        }
+        // BC layer for symfony/config 4.1 and older
+        return $treeBuilder->root($name);
     }
 }
