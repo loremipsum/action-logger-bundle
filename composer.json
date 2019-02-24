@@ -2,20 +2,23 @@
     "name": "loremipsum/action-logger-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle to log custom actions and events with doctrine.",
-    "keywords": ["logging"],
+    "keywords": [
+        "logging"
+    ],
     "homepage": "https://www.loremipsum.at",
     "license": "MIT",
     "require": {
-        "php": ">=7.0",
+        "php": "^7.1",
         "ext-json": "*",
-        "symfony/http-foundation": "^3.4 || ^4.0",
-        "symfony/framework-bundle": "^3.4 || ^4.0",
-        "loremipsum/route-generator-bundle": "^0.1.0"
-    },
-    "require-dev": {
+        "symfony/http-foundation": "^4.0",
+        "symfony/framework-bundle": "^4.0",
+        "loremipsum/route-generator-bundle": "^0.1.0",
+        "twig/twig": "~1.34|~2.4"
     },
     "autoload": {
-        "psr-4": { "LoremIpsum\\ActionLoggerBundle\\": "" },
+        "psr-4": {
+            "LoremIpsum\\ActionLoggerBundle\\": ""
+        },
         "exclude-from-classmap": [
             "/Tests/"
         ]

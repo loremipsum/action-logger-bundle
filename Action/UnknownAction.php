@@ -1,6 +1,6 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
 
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
@@ -8,13 +8,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 final class UnknownAction extends Action
 {
-    public function __construct()
-    {
-    }
-
     public function getIcon()
     {
-        return 'fa fa-exclamation bg-red';
+        return null;
     }
 
     public function getLevel()

@@ -1,6 +1,6 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
 
 use App\Entity\User;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
@@ -39,23 +39,15 @@ abstract class Action implements ActionInterface
         $this->user = $user;
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * @return string|null
-     */
     public function getIcon()
     {
         return null;
     }
-
-    abstract protected function getMetaData();
 
     public function skipPersisting()
     {
@@ -70,7 +62,9 @@ abstract class Action implements ActionInterface
         return $this->meta;
     }
 
-    public function loadFromLog(ObjectManager $em, LogAction $log)
+    abstract protected function getMetaData();
+
+    public function loadFromLogAction(ObjectManager $em, LogAction $log)
     {
         $this->setLog($log);
         $this->setUser($log->getUser());

@@ -1,8 +1,8 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Entity;
 
-interface LoggableActionEntity
+interface ActionLoggable
 {
     /**
      * @return integer
@@ -12,7 +12,7 @@ interface LoggableActionEntity
     /**
      * @return array
      */
-    public function toLogArray();
+    public function toActionLogArray();
 
     public function __toString();
 }

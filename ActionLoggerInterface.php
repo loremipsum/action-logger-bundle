@@ -3,10 +3,11 @@
 namespace LoremIpsum\ActionLoggerBundle;
 
 use App\Entity\User;
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 
 interface ActionLoggerInterface
 {
-    public function log(Action $action);
+    public function log(ActionInterface $action);
 
     public function setCurrentUser(User $user);
 
@@ -14,7 +15,7 @@ interface ActionLoggerInterface
 
     public function bulkLog(array $actions);
 
-    public function flashLog(Action $action, $flashType = 'success');
+    public function flashLog(ActionInterface $action, $flashType = 'success');
 
     public function prepareMessage($message, callable $filterCallback);
 }

@@ -2,6 +2,8 @@
 
 namespace LoremIpsum\ActionLoggerBundle;
 
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
+use LoremIpsum\ActionLoggerBundle\Action\UnknownAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -13,8 +15,14 @@ class ActionFactory
      */
     protected $entityManager;
 
+    /**
+     * @var array
+     */
     protected $actionMapping;
 
+    /**
+     * @var array
+     */
     protected $entityMapping;
 
     public function __construct(ObjectManager $entityManager, array $mapping, array $entityMapping)
@@ -84,10 +92,14 @@ class ActionFactory
     public function getActionFromLog(LogAction $log)
     {
         $action = $this->getActionInstance($log);
-        $action->loadFromLog($this->entityManager, $log);
+        $action->loadFromLogAction($this->entityManager, $log);
         return $action;
     }
 
+    /**
+     * @param LogAction $log
+     * @return ActionInterface
+     */
     protected function getActionInstance(LogAction $log)
     {
         $action = $log->getAction();

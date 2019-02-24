@@ -41,7 +41,7 @@ namespace App\Action\User;
 
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
-use LoremIpsum\ActionLoggerBundle\EntityAction;
+use LoremIpsum\ActionLoggerBundle\Action\EntityAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
 

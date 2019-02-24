@@ -2,7 +2,7 @@
 
 namespace LoremIpsum\ActionLoggerBundle\Event;
 
-use LoremIpsum\ActionLoggerBundle\Action;
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 use LoremIpsum\ActionLoggerBundle\ActionFactory;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -13,14 +13,14 @@ class ActionEvent extends Event
     protected $factory;
     protected $action;
 
-    public function __construct(ActionFactory $factory, Action $action)
+    public function __construct(ActionFactory $factory, ActionInterface $action)
     {
         $this->factory = $factory;
         $this->action  = $action;
     }
 
     /**
-     * @return Action
+     * @return ActionInterface
      */
     public function getAction()
     {

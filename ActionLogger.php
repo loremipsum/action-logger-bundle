@@ -3,6 +3,7 @@
 namespace LoremIpsum\ActionLoggerBundle;
 
 use App\Entity\User;
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogActionRelation;
 use LoremIpsum\ActionLoggerBundle\Event\ActionEvent;
@@ -97,11 +98,11 @@ class ActionLogger implements ActionLoggerInterface
     }
 
     /**
-     * @param Action $action
+     * @param ActionInterface $action
      *
      * @return $this
      */
-    public function log(Action $action)
+    public function log(ActionInterface $action)
     {
         if (! $action->getUser()) {
             $action->setUser($this->getCurrentUser());
@@ -118,16 +119,8 @@ class ActionLogger implements ActionLoggerInterface
             ];
         }
 
-        $log     = new LogAction($this->actionFactory, $action, $extra);
-        $persist = ! $action->skipPersisting();
-        if ($persist) {
-            $this->em->persist($log);
-            $this->persistLogRelations($log, $action);
-        }
-
-        $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
-
-        if ($persist) {
+        $this->createLogAction($action, $extra);
+        if (! $action->skipPersisting()) {
             $this->em->flush();
         }
 
@@ -135,7 +128,7 @@ class ActionLogger implements ActionLoggerInterface
     }
 
     /**
-     * @param Action[] $actions
+     * @param ActionInterface[] $actions
      *
      * @return $this
      */
@@ -160,14 +153,7 @@ class ActionLogger implements ActionLoggerInterface
             if (! $action->getUser()) {
                 $action->setUser($this->getCurrentUser());
             }
-
-            $log = new LogAction($this->actionFactory, $action, $extra);
-            if (! $action->skipPersisting()) {
-                $this->em->persist($log);
-                $this->persistLogRelations($log, $action);
-            }
-
-            $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
+            $this->createLogAction($action, $extra);
         }
 
         $this->em->flush();
@@ -175,7 +161,19 @@ class ActionLogger implements ActionLoggerInterface
         return $this;
     }
 
-    private function persistLogRelations(LogAction $log, Action $action)
+    protected function createLogAction(ActionInterface $action, array $extra)
+    {
+        $log = new LogAction($this->actionFactory, $action, $extra);
+        if (! $action->skipPersisting()) {
+            $this->em->persist($log);
+            $this->persistLogRelations($log, $action);
+        }
+
+        $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
+        return $log;
+    }
+
+    private function persistLogRelations(LogAction $log, ActionInterface $action)
     {
         foreach ($action->getRelations() as $entityClass => $keyIds) {
             $keyEntity = $this->actionFactory->getEntityKey($entityClass);
@@ -187,13 +185,13 @@ class ActionLogger implements ActionLoggerInterface
     }
 
     /**
-     * @param Action $action
-     * @param string $flashType supported: success, info, warning, danger
+     * @param ActionInterface $action
+     * @param string          $flashType supported: success, info, warning, danger
      *
      * @return $this
      * @throws \Twig_Error_Runtime
      */
-    public function flashLog(Action $action, $flashType = 'success')
+    public function flashLog(ActionInterface $action, $flashType = 'success')
     {
         $this->log($action);
 
@@ -212,7 +210,6 @@ class ActionLogger implements ActionLoggerInterface
      * @param callable     $filterCallback
      *
      * @return string
-     * @throws \Twig_Error_Runtime
      */
     public function prepareMessage($message, callable $filterCallback)
     {
@@ -223,7 +220,7 @@ class ActionLogger implements ActionLoggerInterface
         $message = $this->flattenMessageArray($message);
 
         $str = array_shift($message);
-        return \twig_replace_filter($str, array_map(function ($message) use ($filterCallback) {
+        return strtr($str, array_map(function ($message) use ($filterCallback) {
             return $filterCallback($message);
         }, $message));
     }
@@ -234,9 +231,9 @@ class ActionLogger implements ActionLoggerInterface
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $return = array_merge($return, $this->flattenMessageArray($value));
-            } else {
-                $return[$key] = $value;
+                continue;
             }
+            $return[$key] = $value;
         }
         return $return;
     }
