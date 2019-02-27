@@ -1,6 +1,6 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Model;
 
 use App\Entity\User;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;

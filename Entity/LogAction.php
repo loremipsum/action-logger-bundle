@@ -6,7 +6,7 @@ use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
-use LoremIpsum\ActionLoggerBundle\ActionFactory;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 
 /**
  * @ORM\Table(name="log_action", indexes={@ORM\Index(name="logAction_action_idx", columns={"action"})})

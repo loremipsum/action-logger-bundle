@@ -3,8 +3,8 @@
 namespace LoremIpsum\ActionLoggerBundle\Twig;
 
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
-use LoremIpsum\ActionLoggerBundle\ActionLoggerInterface;
-use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
+use LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface;
+use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
 
 class LogActionExtension extends \Twig_Extension
 {

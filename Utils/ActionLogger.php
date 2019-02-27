@@ -1,13 +1,15 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Utils;
 
 use App\Entity\User;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogActionRelation;
 use LoremIpsum\ActionLoggerBundle\Event\ActionEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -77,7 +79,6 @@ class ActionLogger implements ActionLoggerInterface
 
     /**
      * Overwrite current user (default user is provided by TokenStorage)
-     *
      * @param User $user
      */
     public function setCurrentUser(User $user)
@@ -99,7 +100,6 @@ class ActionLogger implements ActionLoggerInterface
 
     /**
      * @param ActionInterface $action
-     *
      * @return $this
      */
     public function log(ActionInterface $action)
@@ -129,7 +129,6 @@ class ActionLogger implements ActionLoggerInterface
 
     /**
      * @param ActionInterface[] $actions
-     *
      * @return $this
      */
     public function bulkLog(array $actions)
@@ -187,9 +186,7 @@ class ActionLogger implements ActionLoggerInterface
     /**
      * @param ActionInterface $action
      * @param string          $flashType supported: success, info, warning, danger
-     *
      * @return $this
-     * @throws \Twig_Error_Runtime
      */
     public function flashLog(ActionInterface $action, $flashType = 'success')
     {
@@ -208,7 +205,6 @@ class ActionLogger implements ActionLoggerInterface
     /**
      * @param array|string $message Action::getMessage or Action::getUserMessage
      * @param callable     $filterCallback
-     *
      * @return string
      */
     public function prepareMessage($message, callable $filterCallback)

@@ -12,9 +12,12 @@ Use the following SQL-Statements (e.g. in your migrations) to update your databa
     UPDATE log_action_relation SET key_hash = SHA2(CONCAT(key_entity, ':', key_id), 256);
 
 - **BC-BREAK** Use `entity_mapping` configuration for log action relations instead of class names
-- **BC-BREAK** Moved Action classes into Action namespace
-- **BC-BREAK** Renamed LoggableActionEntity to Entity\ActionLoggable
-- **BC-BREAK** Renamed ActionLoggable method toLogArray to toActionLogArray
+- **BC-BREAK** Move Action classes into Action namespace
+- **BC-BREAK** Move ActionLoggerInterface into Model namespace
+- **BC-BREAK** Move ActionFactory into Factory namespace
+- **BC-BREAK** Move ActionLogger into Utils namespace
+- **BC-BREAK** Rename LoggableActionEntity to Entity\ActionLoggable
+- **BC-BREAK** Rename ActionLoggable method toLogArray to toActionLogArray
 - Change log index name to logAction_action_idx
 - Set index for LogActionRelation hash: logActionRelation_keyHash_idx index
 - Improve ChangeSet value output

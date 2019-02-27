@@ -5,7 +5,7 @@ namespace LoremIpsum\ActionLoggerBundle\Action;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
-use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
+use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
 
 interface ActionInterface
 {

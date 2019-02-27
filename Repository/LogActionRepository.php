@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use LoremIpsum\ActionLoggerBundle\ActionFactory;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogActionRelation;
 

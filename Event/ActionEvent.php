@@ -3,7 +3,7 @@
 namespace LoremIpsum\ActionLoggerBundle\Event;
 
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
-use LoremIpsum\ActionLoggerBundle\ActionFactory;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 use Symfony\Component\EventDispatcher\Event;
 
 class ActionEvent extends Event
