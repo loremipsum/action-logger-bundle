@@ -5,7 +5,7 @@ namespace LoremIpsum\ActionLoggerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="log_relations", indexes={@ORM\Index(name="logActionRelations_keyHash_idx", columns={"key_hash"})})
+ * @ORM\Table(name="log_action_relation", indexes={@ORM\Index(name="logActionRelation_keyHash_idx", columns={"key_hash"})})
  * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRelationRepository")
  */
 class LogActionRelation

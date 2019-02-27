@@ -1,26 +1,50 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
 
 use App\Entity\User;
-use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
+use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
 
 interface ActionInterface
 {
+    public function setUser(User $user);
+
     /**
-     * @return User|null $User
+     * @return User|null
      */
     public function getUser();
+
+    /**
+     * @param LogAction $log
+     */
+    public function setLog(LogAction $log);
 
     /**
      * @return string|null
      */
     public function getIcon();
 
+    /**
+     * @return int
+     */
     public function getLevel();
 
+    /**
+     * @return bool
+     */
     public function skipPersisting();
 
+    /**
+     * @param ObjectManager $em
+     * @param LogAction     $log
+     */
+    public function loadFromLogAction(ObjectManager $em, LogAction $log);
+
+    /**
+     * @return array
+     */
     public function getLogMetaData();
 
     /**

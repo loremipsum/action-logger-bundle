@@ -3,17 +3,17 @@ services:
         autowire: true
         public: false
 
-    LoremIpsum\ActionLoggerBundle\ActionLoggerInterface: '@LoremIpsum\ActionLoggerBundle\ActionLogger'
+    LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface: '@LoremIpsum\ActionLoggerBundle\Utils\ActionLogger'
 
-    LoremIpsum\ActionLoggerBundle\ActionLogger:
-        class: LoremIpsum\ActionLoggerBundle\ActionLogger
+    LoremIpsum\ActionLoggerBundle\Utils\ActionLogger:
+        class: LoremIpsum\ActionLoggerBundle\Utils\ActionLogger
 
     LoremIpsum\ActionLoggerBundle\Twig\LogActionExtension:
         class: LoremIpsum\ActionLoggerBundle\Twig\LogActionExtension
         tags: ['twig.extension']
 
-    LoremIpsum\ActionLoggerBundle\ActionFactory:
-        class: LoremIpsum\ActionLoggerBundle\ActionFactory
+    LoremIpsum\ActionLoggerBundle\Factory\ActionFactory:
+        class: LoremIpsum\ActionLoggerBundle\Factory\ActionFactory
         arguments: ['@doctrine.orm.entity_manager', '%loremipsum.action_logger.mapping%', '%loremipsum.action_logger.entity_mapping%']
 
     LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository:

@@ -2,9 +2,9 @@
 
 namespace LoremIpsum\ActionLoggerBundle\Twig;
 
-use LoremIpsum\ActionLoggerBundle\ActionInterface;
-use LoremIpsum\ActionLoggerBundle\ActionLoggerInterface;
-use LoremIpsum\RouteGeneratorBundle\RouteGeneratorInterface;
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
+use LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface;
+use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
 
 class LogActionExtension extends \Twig_Extension
 {
@@ -33,11 +33,9 @@ class LogActionExtension extends \Twig_Extension
 
     public function actionMessage(\Twig_Environment $env, ActionInterface $action)
     {
-        if ($action->getUser() === $this->actionLogger->getCurrentUser()) {
-            $message = $action->getMessage($this->router);
-        } else {
-            $message = $action->getUserMessage($this->router);
-        }
+        $message = $action->getUser() === $this->actionLogger->getCurrentUser() ?
+            $action->getMessage($this->router) :
+            $action->getUserMessage($this->router);
 
         return $this->actionLogger->prepareMessage($message, function ($message) use ($env) {
             return \twig_escape_filter($env, $message);

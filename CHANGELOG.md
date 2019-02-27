@@ -1,17 +1,25 @@
 # ActionLoggerBundle Changelog
 
-## [0.2.0-dev] - 2019-02-14
-### Add 
-- Add logActionRelations_key_idx index
-
+## [Unreleased 0.2.0]
 ### Change
-- **BC** Use `entity_mapping` configuration for log action relations instead of class names
-- **BC** Add keyHash to LogActionRelation used to find related log actions.
-    Use the following SQL-Statement (e.g. in your migrations) to update all hashes:
+- **BC-BREAK** Add keyHash to LogActionRelation used to find related log actions.
+- **BC-BREAK** Rename table log to log_action and log_relations to log_action_relation
 
-      UPDATE log_relations SET key_hash = SHA2(CONCAT(key_entity, ':', key_id), 256);
+Use the following SQL-Statements (e.g. in your migrations) to update your database:
 
+    RENAME TABLE log TO log_action
+    RENAME TABLE log_relations TO log_action_relation
+    UPDATE log_action_relation SET key_hash = SHA2(CONCAT(key_entity, ':', key_id), 256);
+
+- **BC-BREAK** Use `entity_mapping` configuration for log action relations instead of class names
+- **BC-BREAK** Move Action classes into Action namespace
+- **BC-BREAK** Move ActionLoggerInterface into Model namespace
+- **BC-BREAK** Move ActionFactory into Factory namespace
+- **BC-BREAK** Move ActionLogger into Utils namespace
+- **BC-BREAK** Rename LoggableActionEntity to Entity\ActionLoggable
+- **BC-BREAK** Rename ActionLoggable method toLogArray to toActionLogArray
 - Change log index name to logAction_action_idx
+- Set index for LogActionRelation hash: logActionRelation_keyHash_idx index
 - Improve ChangeSet value output
 
 ## [0.1.3] - 2018-10-24

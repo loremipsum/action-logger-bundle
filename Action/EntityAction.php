@@ -1,12 +1,14 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
+
+use LoremIpsum\ActionLoggerBundle\Entity\ActionLoggable;
 
 abstract class EntityAction extends Action
 {
     protected $entity;
 
-    public function __construct(LoggableActionEntity $entity = null)
+    public function __construct(ActionLoggable $entity = null)
     {
         $this->entity = $entity;
     }

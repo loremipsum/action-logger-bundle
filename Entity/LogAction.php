@@ -5,11 +5,11 @@ namespace LoremIpsum\ActionLoggerBundle\Entity;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use LoremIpsum\ActionLoggerBundle\Action;
-use LoremIpsum\ActionLoggerBundle\ActionFactory;
+use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 
 /**
- * @ORM\Table(name="log", indexes={@ORM\Index(name="logAction_action_idx", columns={"action"})})
+ * @ORM\Table(name="log_action", indexes={@ORM\Index(name="logAction_action_idx", columns={"action"})})
  * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository")
  */
 class LogAction
@@ -50,7 +50,7 @@ class LogAction
      * @var array|null
      * @ORM\Column(name="meta_data", type="array", nullable=true)
      */
-    private $meta_data;
+    private $metaData;
 
     /**
      * @var int
@@ -70,7 +70,7 @@ class LogAction
      */
     private $relations;
 
-    public function __construct(ActionFactory $factory, Action $action, array $extra)
+    public function __construct(ActionFactory $factory, ActionInterface $action, array $extra)
     {
         $action->setLog($this);
         $this->setUser($action->getUser());
@@ -128,7 +128,7 @@ class LogAction
      */
     private function setMetaData($metaData)
     {
-        $this->meta_data = $metaData;
+        $this->metaData = $metaData;
     }
 
     /**
@@ -136,7 +136,7 @@ class LogAction
      */
     public function getMetaData()
     {
-        return $this->meta_data;
+        return $this->metaData;
     }
 
     /**

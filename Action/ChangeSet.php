@@ -1,6 +1,6 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
 
 trait ChangeSet
 {

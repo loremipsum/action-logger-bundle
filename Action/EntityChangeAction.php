@@ -1,6 +1,8 @@
 <?php
 
-namespace LoremIpsum\ActionLoggerBundle;
+namespace LoremIpsum\ActionLoggerBundle\Action;
+
+use LoremIpsum\ActionLoggerBundle\Entity\ActionLoggable;
 
 abstract class EntityChangeAction extends EntityAction
 {
@@ -8,18 +10,18 @@ abstract class EntityChangeAction extends EntityAction
 
     protected $preChangeData = [];
 
-    public function __construct(LoggableActionEntity $entity = null)
+    public function __construct(ActionLoggable $entity = null)
     {
         parent::__construct($entity);
         if ($entity) {
-            $this->preChangeData = $entity->toLogArray();
+            $this->preChangeData = $entity->toActionLogArray();
         }
     }
 
     protected function getMetaData()
     {
         return array_merge(parent::getMetaData(), [
-            'changes' => $this->getChangeSet($this->preChangeData, $this->entity->toLogArray()),
+            'changes' => $this->getChangeSet($this->preChangeData, $this->entity->toActionLogArray()),
         ]);
     }
 
