@@ -1,6 +1,6 @@
 # ActionLoggerBundle Changelog
 
-## [0.2.0-dev] - 2019-02-14
+## [Unreleased 0.2.0]
 ### Change
 - **BC-BREAK** Add keyHash to LogActionRelation used to find related log actions.
 - **BC-BREAK** Rename table log to log_action and log_relations to log_action_relation
