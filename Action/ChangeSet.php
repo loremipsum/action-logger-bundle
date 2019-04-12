@@ -31,6 +31,9 @@ trait ChangeSet
         if ($value instanceof \DateTime) {
             return $value->format('Y-m-d H:i:s');
         }
+        if (is_scalar($value)) {
+            return (string)$value;
+        }
         if (! is_array($value)
             && ((! is_object($value) && settype($value, 'string') !== false)
                 || (is_object($value) && method_exists($value, '__toString')))
