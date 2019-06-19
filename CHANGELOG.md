@@ -22,6 +22,10 @@ Use the following SQL-Statements (e.g. in your migrations) to update your databa
 - Set index for LogActionRelation hash: logActionRelation_keyHash_idx index
 - Improve ChangeSet value output
 
+## [0.1.4] - 2019-04-23
+### Add
+- Support loremipsum/route-generator-bundle v0.2
+
 ## [0.1.3] - 2018-10-24
 ### Add
 - Add loremipsum/route-generator-bundle as required dependency
