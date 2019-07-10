@@ -168,7 +168,7 @@ class ActionLogger implements ActionLoggerInterface
             $this->persistLogRelations($log, $action);
         }
 
-        $this->dispatcher->dispatch(ActionEvent::NAME, new ActionEvent($this->actionFactory, $action));
+        $this->dispatcher->dispatch(new ActionEvent($this->actionFactory, $action));
         return $log;
     }
 

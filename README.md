@@ -126,7 +126,7 @@ class ActionLogListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ActionEvent::NAME => 'onLog',
+            ActionEvent::class => 'onLog',
         ];
     }
 }

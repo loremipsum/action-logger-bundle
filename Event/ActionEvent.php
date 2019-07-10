@@ -8,8 +8,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ActionEvent extends Event
 {
-    const NAME = 'actionlogger.log';
-
     protected $factory;
     protected $action;
 
