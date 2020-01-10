@@ -22,6 +22,7 @@ Use the following SQL-Statements (e.g. in your migrations) to update your databa
 - **BC-BREAK** Rename LoggableActionEntity to Entity\ActionLoggable
 - **BC-BREAK** Rename ActionLoggable method toLogArray to toActionLogArray
 - **BC-BREAK** Remove ActionEvent name and use class name instead
+- **BC-BREAK** Add getLog to ActionInterface
 - Change log index name to logAction_action_idx
 - Set index for LogActionRelation hash: logActionRelation_keyHash_idx index
 - Improve ChangeSet value output

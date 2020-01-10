@@ -22,6 +22,11 @@ interface ActionInterface
     public function setLog(LogAction $log);
 
     /**
+     * @return LogAction|null
+     */
+    public function getLog();
+
+    /**
      * @return string|null
      */
     public function getIcon();
@@ -61,8 +66,8 @@ interface ActionInterface
 
     /**
      * Returns an associative array of related entities, where the entity name is the key and the id is the value, or
-     * @example ['App\Entity\User' => 1, 'App\Entity\Customer' => [1, 2]]
      * @return array
+     * @example ['App\Entity\User' => 1, 'App\Entity\Customer' => [1, 2]]
      */
     public function getRelations();
 }
