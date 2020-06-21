@@ -1,6 +1,6 @@
 # ActionLoggerBundle Changelog
 
-## [Unreleased 0.2.0]
+## [0.2.0] - 2020-06-21
 ### Add
 - New `EntityDeleteAction`
 
