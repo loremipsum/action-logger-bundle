@@ -5,6 +5,8 @@
 - New `EntityDeleteAction`
 
 ### Change
+- **BC-BREAK** Change comparison in ChangeSet to strict and allow to use a compare function.
+- **BC-BREAK** Always flush in ActionLogger::log method regardless of skipPersisting return value.
 - **BC-BREAK** Add keyHash to LogActionRelation used to find related log actions.
 - **BC-BREAK** Rename table log to log_action and log_relations to log_action_relation
 

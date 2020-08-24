@@ -120,9 +120,7 @@ class ActionLogger implements ActionLoggerInterface
         }
 
         $this->createLogAction($action, $extra);
-        if (! $action->skipPersisting()) {
-            $this->em->flush();
-        }
+        $this->em->flush();
 
         return $this;
     }

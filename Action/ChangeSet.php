@@ -2,6 +2,8 @@
 
 namespace LoremIpsum\ActionLoggerBundle\Action;
 
+use DateTime;
+
 trait ChangeSet
 {
     protected function getChanges(array $changeSet, array $skip = [])
@@ -28,7 +30,7 @@ trait ChangeSet
 
     private function getChangeSetValue($value)
     {
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             return $value->format('Y-m-d H:i:s');
         }
         if (is_scalar($value)) {
@@ -44,12 +46,13 @@ trait ChangeSet
     }
 
     /**
-     * @param array $old
-     * @param array $new
-     * @param array $skip
+     * @param array         $old
+     * @param array         $new
+     * @param array         $skip
+     * @param callable|null $equals function (string $key, mixed $oldValue, mixed $newValue) { return $oldValue === $newValue; }
      * @return array diff between old and new as list of key => [old-value, new-value]
      */
-    protected function getChangeSet(array $old, array $new, array $skip = [])
+    protected function getChangeSet(array $old, array $new, array $skip = [], callable $equals = null)
     {
         $diff = [];
         foreach (array_keys($old + $new) as $key) {
@@ -58,7 +61,7 @@ trait ChangeSet
             }
             $oldValue = array_key_exists($key, $old) ? $old[$key] : null;
             $newValue = array_key_exists($key, $new) ? $new[$key] : null;
-            if ($oldValue != $newValue) {
+            if (($equals && ! $equals($key, $oldValue, $newValue)) || (! $equals && $oldValue !== $newValue)) {
                 $diff[$key] = [$oldValue, $newValue];
             }
         }
