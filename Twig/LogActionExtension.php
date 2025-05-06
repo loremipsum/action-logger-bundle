@@ -5,8 +5,11 @@ namespace LoremIpsum\ActionLoggerBundle\Twig;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 use LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface;
 use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\Environment;
+use Twig\TwigFilter;
 
-class LogActionExtension extends \Twig_Extension
+class LogActionExtension extends AbstractExtension
 {
     /**
      * @var RouteGeneratorInterface
@@ -27,11 +30,11 @@ class LogActionExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_Filter('actionMessage', [$this, 'actionMessage'], ['is_safe' => ['html'], 'needs_environment' => true]),
+            new TwigFilter('actionMessage', [$this, 'actionMessage'], ['is_safe' => ['html'], 'needs_environment' => true]),
         ];
     }
 
-    public function actionMessage(\Twig_Environment $env, ActionInterface $action)
+    public function actionMessage(Environment $env, ActionInterface $action)
     {
         $message = $action->getUser() === $this->actionLogger->getCurrentUser() ?
             $action->getMessage($this->router) :
