@@ -1,5 +1,9 @@
 # ActionLoggerBundle Changelog
 
+## [0.3.0] - 2025-05-06
+### Change
+- Support symfony 7
+
 ## [0.2.0] - 2020-06-21
 ### Add
 - New `EntityDeleteAction`

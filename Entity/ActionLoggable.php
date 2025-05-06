@@ -4,15 +4,9 @@ namespace LoremIpsum\ActionLoggerBundle\Entity;
 
 interface ActionLoggable
 {
-    /**
-     * @return integer
-     */
     public function getId();
 
-    /**
-     * @return array
-     */
-    public function toActionLogArray();
+    public function toActionLogArray(): array;
 
     public function __toString();
 }
