@@ -2,7 +2,7 @@
 
 namespace LoremIpsum\ActionLoggerBundle\Action;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use LoremIpsum\ActionLoggerBundle\Entity\ActionLoggable;
 
 abstract class EntityDeleteAction extends EntityAction

@@ -5,7 +5,7 @@ namespace LoremIpsum\ActionLoggerBundle\Factory;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 use LoremIpsum\ActionLoggerBundle\Action\UnknownAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class ActionFactory

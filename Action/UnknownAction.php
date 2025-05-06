@@ -4,7 +4,7 @@ namespace LoremIpsum\ActionLoggerBundle\Action;
 
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 final class UnknownAction extends Action
 {

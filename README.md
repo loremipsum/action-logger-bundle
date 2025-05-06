@@ -5,7 +5,7 @@ Symfony bundle to log custom actions and events with doctrine.
 ## Configuration
 
 ```yaml
-# config/packages/lorem_ipsum_action_logger.yaml 
+# config/packages/lorem_ipsum_action_logger.yaml
 
 lorem_ipsum_action_logger:
     # mapping is used to store actions in the database without using the class name
@@ -21,8 +21,8 @@ lorem_ipsum_action_logger:
 
 ## Action example
 
-Usage example:  
-A new user has been created. All you have to do is call `log` or `flashLog` 
+Usage example:
+A new user has been created. All you have to do is call `log` or `flashLog`
 on our ActionLogger with the `UserAddAction` and the new `$user` entity.
 
 ```php
@@ -40,7 +40,7 @@ And here is our `UserAddAction`:
 namespace App\Action\User;
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use LoremIpsum\ActionLoggerBundle\Action\EntityAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\RouteGeneratorBundle\Model\RouteGeneratorInterface;
@@ -56,7 +56,7 @@ class UserAddAction extends EntityAction
     {
         parent::__construct($entity);
     }
-    
+
     public function getIcon()
     {
         return 'fa fa-plus';
@@ -79,7 +79,7 @@ class UserAddAction extends EntityAction
         }
         return ["<a href=\"{$router->generate($this->entity)}\">%entity%</a>", ['%entity%' => $this->entity]];
     }
-    
+
     public function getMessage(RouteGeneratorInterface $router = null)
     {
         list($entity, $entities) = $this->getLink($router);
