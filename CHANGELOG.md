@@ -18,6 +18,7 @@ Use the following SQL-Statements (e.g. in your migrations) to update your databa
 
     RENAME TABLE log TO log_action
     RENAME TABLE log_relations TO log_action_relation
+    ALTER TABLE log_action_relation ADD key_hash VARCHAR(64)
     UPDATE log_action_relation SET key_hash = SHA2(CONCAT(key_entity, ':', key_id), 256);
 
 - **BC-BREAK** Use `entity_mapping` configuration for log action relations instead of class names
