@@ -4,44 +4,27 @@ namespace LoremIpsum\ActionLoggerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="log_action_relation", indexes={@ORM\Index(name="logActionRelation_keyHash_idx", columns={"key_hash"})})
- * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRelationRepository")
- */
+#[ORM\Table(name: 'log_action_relation', indexes: [new ORM\Index(name: 'logActionRelation_keyHash_idx', columns: ['key_hash'])])]
+#[ORM\Entity(repositoryClass: 'LoremIpsum\ActionLoggerBundle\Repository\LogActionRelationRepository')]
 class LogActionRelation
 {
-    /**
-     * @var int|null
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
 
-    /**
-     * @var LogAction
-     * @ORM\ManyToOne(targetEntity="LogAction", inversedBy="relations")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $log;
+    #[ORM\ManyToOne(targetEntity: LogAction::class, inversedBy: 'relations')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private LogAction $log;
 
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     */
-    private $keyId;
+    #[ORM\Column(type: 'integer')]
+    private int $keyId = 0;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $keyEntity;
+    #[ORM\Column(type: 'string')]
+    private string $keyEntity = "";
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=64)
-     */
-    private $keyHash;
+    #[ORM\Column(type: 'string', length: 64)]
+    private string $keyHash = "";
 
     public function __construct(LogAction $log, $keyId, $keyEntity)
     {
@@ -51,52 +34,32 @@ class LogActionRelation
         $this->keyHash   = self::hash($keyId, $keyEntity);
     }
 
-    /**
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return LogAction
-     */
-    public function getLog()
+    public function getLog(): LogAction
     {
         return $this->log;
     }
 
-    /**
-     * @return int
-     */
-    public function getKeyId()
+    public function getKeyId(): int
     {
         return $this->keyId;
     }
 
-    /**
-     * @return string
-     */
-    public function getKeyEntity()
+    public function getKeyEntity(): string
     {
         return $this->keyEntity;
     }
 
-    /**
-     * @return string
-     */
-    public function setKeyHash()
+    public function getKeyHash(): string
     {
         return $this->keyHash;
     }
 
-    /**
-     * @param int|string $id
-     * @param string     $entity
-     * @return string
-     */
-    public static function hash($id, $entity)
+    public static function hash(int|string $id, string $entity): string
     {
         return hash("sha256", $entity . ':' . $id);
     }

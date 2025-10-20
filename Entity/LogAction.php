@@ -3,15 +3,14 @@
 namespace LoremIpsum\ActionLoggerBundle\Entity;
 
 use App\Entity\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
 use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 
-/**
- * @ORM\Table(name="log_action", indexes={@ORM\Index(name="logAction_action_idx", columns={"action"})})
- * @ORM\Entity(repositoryClass="LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository")
- */
+#[ORM\Table(name: 'log_action', indexes: [new ORM\Index(name: 'logAction_action_idx', columns: ['action'])])]
+#[ORM\Entity(repositoryClass: 'LoremIpsum\ActionLoggerBundle\Repository\LogActionRepository')]
 class LogAction
 {
     const LEVEL_ERROR = 400;
@@ -20,61 +19,40 @@ class LogAction
     const LEVEL_INFO = 200;
     const LEVEL_DEBUG = 100;
 
-    /**
-     * @var int|null
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue]
+    private ?int $id = null;
 
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $user = null;
 
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="time", type="datetime")
-     */
-    private $time;
+    #[ORM\Column(name: 'time', type: 'datetime')]
+    private DateTime $time;
 
-    /**
-     * @var string
-     * @ORM\Column(name="action", type="string", length=191)
-     */
-    private $action;
+    #[ORM\Column(name: 'action', type: 'string', length: 191)]
+    private string $action = "";
 
-    /**
-     * @var array|null
-     * @ORM\Column(name="meta_data", type="array", nullable=true)
-     */
-    private $metaData;
+    #[ORM\Column(name: 'meta_data', type: 'array', nullable: true)]
+    private ?array $metaData = null;
 
-    /**
-     * @var int
-     * @ORM\Column(name="level", type="smallint")
-     */
-    private $level;
+    #[ORM\Column(name: 'level', type: 'smallint')]
+    private int $level = 0;
 
-    /**
-     * @var array|null
-     * @ORM\Column(name="extra", type="array", nullable=true)
-     */
-    private $extra;
+    #[ORM\Column(name: 'extra', type: 'array', nullable: true)]
+    private ?array $extra = null;
 
     /**
      * @var LogActionRelation[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="LogActionRelation", mappedBy="log")
      */
+    #[ORM\OneToMany(targetEntity: LogActionRelation::class, mappedBy: 'log')]
     private $relations;
 
     public function __construct(ActionFactory $factory, ActionInterface $action, array $extra)
     {
         $action->setLog($this);
         $this->setUser($action->getUser());
-        $this->setTime(new \DateTime('now'));
+        $this->setTime(new DateTime('now'));
         $this->setAction($factory->getAction(get_class($action)));
         $this->setMetaData($action->getLogMetaData());
         $this->setLevel($action->getLevel());
@@ -83,106 +61,67 @@ class LogAction
         $this->relations = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param \DateTime $time
-     */
-    private function setTime($time)
+    private function setTime(DateTime $time): void
     {
         $this->time = $time;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getTime()
+    public function getTime(): DateTime
     {
         return $this->time;
     }
 
-    /**
-     * @param string $action
-     */
-    public function setAction($action)
+    public function setAction(string $action): void
     {
         $this->action = $action;
     }
 
-    /**
-     * @return string
-     */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
 
-    /**
-     * @param array $metaData
-     */
-    private function setMetaData($metaData)
+    private function setMetaData(?array $metaData): void
     {
         $this->metaData = $metaData;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getMetaData()
+    public function getMetaData(): ?array
     {
         return $this->metaData;
     }
 
-    /**
-     * @param array $extra
-     */
-    private function setExtra($extra)
+    private function setExtra(?array $extra): void
     {
         $this->extra = $extra;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getExtra()
+    public function getExtra(): ?array
     {
         return $this->extra;
     }
 
-    /**
-     * @param User|null $user
-     */
-    private function setUser(User $user = null)
+    private function setUser(?User $user = null): void
     {
         $this->user = $user;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @param int $level
-     */
-    private function setLevel($level)
+    private function setLevel(int $level): void
     {
         $this->level = $level;
     }
 
-    /**
-     * @return int
-     */
-    public function getLevel()
+    public function getLevel(): int
     {
         return $this->level;
     }
