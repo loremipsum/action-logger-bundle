@@ -3,106 +3,49 @@
 namespace LoremIpsum\ActionLoggerBundle\Utils;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use LoremIpsum\ActionLoggerBundle\Action\ActionInterface;
-use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 use LoremIpsum\ActionLoggerBundle\Entity\LogAction;
 use LoremIpsum\ActionLoggerBundle\Entity\LogActionRelation;
 use LoremIpsum\ActionLoggerBundle\Event\ActionEvent;
-use Doctrine\ORM\EntityManagerInterface;
+use LoremIpsum\ActionLoggerBundle\Factory\ActionFactory;
 use LoremIpsum\ActionLoggerBundle\Model\ActionLoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ActionLogger implements ActionLoggerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
-
-    /**
-     * @var ActionFactory
-     */
-    private $actionFactory;
-
-    /**
-     * @var User
-     */
-    private $user;
+    private ?User $user;
 
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        EntityManagerInterface $em,
-        SessionInterface $session,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        EventDispatcherInterface $dispatcher,
-        ActionFactory $actionFactory
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly EntityManagerInterface $em,
+        private readonly RequestStack $requestStack,
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly ActionFactory $actionFactory
     ) {
-        $this->em            = $em;
-        $this->tokenStorage  = $tokenStorage;
-        $this->session       = $session;
-        $this->router        = $router;
-        $this->requestStack  = $requestStack;
-        $this->dispatcher    = $dispatcher;
-        $this->actionFactory = $actionFactory;
     }
 
     /**
      * Overwrite current user (default user is provided by TokenStorage)
      * @param User $user
      */
-    public function setCurrentUser(User $user)
+    public function setCurrentUser(User $user): void
     {
         $this->user = $user;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getCurrentUser()
+    public function getCurrentUser(): ?User
     {
         if (! $this->user) {
             $token      = $this->tokenStorage->getToken();
-            $this->user = $token ? $token->getUser() : null;
+            $this->user = $token?->getUser();
         }
         return $this->user;
     }
 
-    /**
-     * @param ActionInterface $action
-     * @return $this
-     */
-    public function log(ActionInterface $action)
+    public function log(ActionInterface $action): static
     {
         if (! $action->getUser()) {
             $action->setUser($this->getCurrentUser());
@@ -129,7 +72,7 @@ class ActionLogger implements ActionLoggerInterface
      * @param ActionInterface[] $actions
      * @return $this
      */
-    public function bulkLog(array $actions)
+    public function bulkLog(array $actions): static
     {
         if (empty($actions)) {
             return $this;
@@ -158,7 +101,7 @@ class ActionLogger implements ActionLoggerInterface
         return $this;
     }
 
-    protected function createLogAction(ActionInterface $action, array $extra)
+    protected function createLogAction(ActionInterface $action, array $extra): LogAction
     {
         $log = new LogAction($this->actionFactory, $action, $extra);
         if (! $action->skipPersisting()) {
@@ -170,7 +113,7 @@ class ActionLogger implements ActionLoggerInterface
         return $log;
     }
 
-    private function persistLogRelations(LogAction $log, ActionInterface $action)
+    private function persistLogRelations(LogAction $log, ActionInterface $action): void
     {
         foreach ($action->getRelations() as $entityClass => $keyIds) {
             $keyEntity = $this->actionFactory->getEntityKey($entityClass);
@@ -186,16 +129,15 @@ class ActionLogger implements ActionLoggerInterface
      * @param string          $flashType supported: success, info, warning, danger
      * @return $this
      */
-    public function flashLog(ActionInterface $action, $flashType = 'success')
+    public function flashLog(ActionInterface $action, $flashType = 'success'): static
     {
         $this->log($action);
 
-        if ($this->session instanceof Session) {
-            $this->session->getFlashBag()
-                          ->add($flashType, $this->prepareMessage($action->getMessage(), function ($message) {
-                              return htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE);
-                          }));
-        }
+        $this->requestStack->getSession()
+                           ->getFlashBag()
+                           ->add($flashType, $this->prepareMessage($action->getMessage(), function ($message) {
+                               return htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE);
+                           }));
 
         return $this;
     }
@@ -205,7 +147,7 @@ class ActionLogger implements ActionLoggerInterface
      * @param callable     $filterCallback
      * @return string
      */
-    public function prepareMessage($message, callable $filterCallback)
+    public function prepareMessage($message, callable $filterCallback): string
     {
         if (! is_array($message)) {
             return $filterCallback((string)$message);
