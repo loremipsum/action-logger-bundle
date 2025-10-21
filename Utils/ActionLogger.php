@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class ActionLogger implements ActionLoggerInterface
 {
-    private ?User $user;
+    private ?User $user = null;
 
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,

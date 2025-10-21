@@ -1,5 +1,9 @@
 # ActionLoggerBundle Changelog
 
+## [0.4.0] - 2025-10-21
+### Change
+- Support php 8.1
+
 ## [0.3.0] - 2025-05-06
 ### Change
 - Support symfony 7
